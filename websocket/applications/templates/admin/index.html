@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统首页</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.min.js"></script>
+</head>
+<body>
+    <input type="text" name="sendmsg">
+    <button type="button" onclick="sendmsg();">发送</button>
+    <script type="text/javascript">
+        namespace = "/wechat"
+        var socketio = io.connect('http://' + document.domain + ':' + location.port + namespace);
+        socketio.on('message',function(data){
+            console.log(data);
+        });
+        socketio.on('response',function(data){
+            console.log("服务端的消息:"+data.data);
+        });
+        function sendmsg(){
+            socketio.emit('message',{'data':$("input[name='sendmsg']").val()});
+        }
+    </script>
+</body>
+</html>
